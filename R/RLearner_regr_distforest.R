@@ -86,30 +86,3 @@ predictLearner.regr.distforest = function(.learner, .model, .newdata, jitter, ..
 registerS3method("makeRLearner", "regr.distforest", makeRLearner.regr.distforest)
 registerS3method("trainLearner", "regr.distforest", trainLearner.regr.distforest)
 registerS3method("predictLearner", "regr.distforest", predictLearner.regr.distforest)
-
-if (FALSE) {
-library(mlr)
-library(parallelMap)
-parallelStartMulticore(4)
-source("RLearner_regr_distforest.R")
-lrn = makeLearner("regr.distforest", predict.type = "se", num.trees = 500, num.threads = 4)
-
-mod = train(lrn, bh.task, subset = 1:400)
-pred = predict(mod, bh.task, subset = 1:10)
-performance(pred, mse)
-
-bmr = benchmark(
-  list(lrn, makeLearner("regr.ranger"), makeLearner("regr.lm")),
-  bh.task,
-  cv10, mse)
-
-
-library(mlrMBO)
-obj.fun = makeBraninFunction()
-
-ctrl = makeMBOControl()
-ctrl = setMBOControlTermination(ctrl, iters = 3L)
-run = exampleRun(obj.fun, learner = lrn, control = ctrl)
-plotExampleRun(run)
-
-}
