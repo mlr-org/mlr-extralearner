@@ -5,7 +5,7 @@ This repository contains additional learner for [mlr](https://github.com/mlr-org
 
 **Warning**: These learners can be untested, unstable or unfinished. Use at your own risk.
 
-To easily use them, just source the path to the `raw` github link, e.g.,
+To easily use them, just source the path to the `raw.githubusercontent` link, e.g.,
 
 ```{r}
 library(mlr)
