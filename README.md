@@ -13,4 +13,4 @@ source("https://raw.githubusercontent.com/mlr-org/mlr-extralearner/master/R/RLea
 ```
 
 
-If you have learner feel free to add them here by creating a [pull request](https://github.com/mlr-org/mlr-extralearner/compare). 
+If you have new learner feel free to add them here by creating a [pull request](https://github.com/mlr-org/mlr-extralearner/compare). 
