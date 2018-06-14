@@ -38,7 +38,7 @@ trainLearner.regr.fixcubist = function(.learner, .task, .subset, .weights = NULL
   m = Cubist::cubist(x = d$data, y = d$target, control = ctrl, ...)
   m$new.names = new.names
   m$sample.vars = sample.vars
-  return(model)
+  return(m)
 }
 
 #' @export
