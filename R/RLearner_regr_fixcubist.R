@@ -30,8 +30,8 @@ trainLearner.regr.fixcubist = function(.learner, .task, .subset, .weights = NULL
   d = getTaskData(.task, .subset, target.extra = TRUE)
 
   # Rename all sample variables to something else
-  sample.vars = stri_detect_fixed(colnames(d$data), "sample", case_insensitive = TRUE)
-  sample.names = stri_rand_strings(length(sample.vars), 10, '[a-zA-Z]')
+  sample.vars = stringi::stri_detect_fixed(colnames(d$data), "sample", case_insensitive = TRUE)
+  sample.names = stringi::stri_rand_strings(length(sample.vars), 10, '[a-zA-Z]')
   new.names = setdiff(sample.names, colnames(d$data))[seq_len(sum(sample.vars, na.rm = TRUE))]
   colnames(d$data)[sample.vars] = new.names
 
