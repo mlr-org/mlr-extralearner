@@ -4,7 +4,7 @@
 makeRLearner.regr.fixcubist = function() {
   makeRLearnerRegr(
     cl = "regr.fixcubist",
-    package = "Cubist_fixed",
+    package = "Cubist",
     par.set = makeParamSet(
       makeIntegerLearnerParam(id = "committees", default = 1L, lower = 1L, upper = 100L),
       makeLogicalLearnerParam(id = "unbiased", default = FALSE),
