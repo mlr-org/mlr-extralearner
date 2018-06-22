@@ -5,7 +5,7 @@ makeRLearner.classif.gam = function() {
     package = "mgcv",
     par.set = makeParamSet(
       makeUntypedLearnerParam(id = "formula", default = NULL),
-      makeNumericVectorLearnerParam(id = "sp", default = NULL),
+      makeNumericVectorLearnerParam(id = "sp"),
       makeNumericVectorLearnerParam(id = "min.sp", default = NULL, requires = quote(sp)),
       makeUntypedLearnerParam(id = "in.out", default = NULL),
       makeUntypedLearnerParam(id = "paraPen", default = NULL),
