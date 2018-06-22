@@ -83,7 +83,7 @@ predictLearner.classif.gam = function(.learner, .model, .newdata, ...) {
   x = predict(.model$learner.model, newdata = .newdata, type = "response", ...)
   levs = .model$task.desc$class.levels
   if (.learner$predict.type == "prob") {
-    propVectorToMatrix(x, levs)
+    mlr:::propVectorToMatrix(x, levs)
   } else {
     levs = .model$task.desc$class.levels
     p = as.factor(ifelse(x > 0.5, levs[2L], levs[1L]))
