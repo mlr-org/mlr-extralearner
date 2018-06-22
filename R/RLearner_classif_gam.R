@@ -61,7 +61,7 @@ trainLearner.classif.gam = function(.learner, .task, .subset, .weights = NULL, f
   # check for correct length of sp (if supplied)
   if(!is.null(sp)) {
     n_smooth = length(attr(terms(formula(formula), specials = "s"), "specials")$s)
-    if (length(n_smooth) != length(sp)) {
+    if (n_smooth != length(sp)) {
       stopf("'sp' must have the same length as smoothed covariates.")
     }
   }
