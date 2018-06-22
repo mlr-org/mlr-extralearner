@@ -6,7 +6,7 @@ makeRLearner.classif.gam = function() {
     par.set = makeParamSet(
       makeUntypedLearnerParam(id = "formula", default = NULL),
       makeNumericVectorLearnerParam(id = "sp"),
-      makeNumericVectorLearnerParam(id = "min.sp", default = NULL, requires = quote(sp)),
+      makeNumericVectorLearnerParam(id = "min.sp", requires = quote(sp)),
       makeUntypedLearnerParam(id = "in.out", default = NULL),
       makeUntypedLearnerParam(id = "paraPen", default = NULL),
       makeDiscreteLearnerParam(id = "method", default = "GCV.Cp",
