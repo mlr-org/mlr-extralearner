@@ -1,6 +1,6 @@
-context("RLearner lightgbm")
+context("RLearner fixcubist")
 
-test_that("fixcubist works", {
+test_that("fixcubist still works", {
   #response + binary classif
   lrn = makeLearner("regr.fixcubist")
   res = holdout(lrn, bh.task)

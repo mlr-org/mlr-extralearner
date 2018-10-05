@@ -38,8 +38,10 @@ trainLearner.regr.fixcubist = function(.learner, .task, .subset, .weights = NULL
     colnames(d$data)[sample.vars] = new.names
   }
   m = Cubist::cubist(x = d$data, y = d$target, control = ctrl, ...)
-  m$new.names = new.names
-  m$sample.vars = sample.vars
+  if (sum(sample.vars) > 0) {
+    m$new.names = new.names
+    m$sample.vars = sample.vars
+  }
   return(m)
 }
 
