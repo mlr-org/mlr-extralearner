@@ -30,15 +30,15 @@ trainLearner.regr.fixcubist = function(.learner, .task, .subset, .weights = NULL
   d = getTaskData(.task, .subset, target.extra = TRUE)
 
   # Rename all sample variables to some random string if ocurring
-  sample.vars = stringi::stri_detect_fixed(colnames(d$data), "sample", case_insensitive = TRUE)
-  if (sum(sample.vars) > 0) {
+  sample.vars = stringi::stri_subset_fixed(colnames(d$data), "sample", case_insensitive = TRUE)
+  if (length(sample.vars) > 0) {
     new.names = stringi::stri_rand_strings(length(sample.vars), 10, '[a-zA-Z]')
     # Make sure we do not overwrite any existing varnames
-    new.names = setdiff(new.names, colnames(d$data))[seq_len(sum(sample.vars, na.rm = TRUE))]
-    colnames(d$data)[sample.vars] = new.names
+    new.names = setdiff(new.names, colnames(d$data))[seq_len(length(sample.vars))]
+    colnames(d$data)[colnames(d$data) %in% sample.vars] = new.names
   }
   m = Cubist::cubist(x = d$data, y = d$target, control = ctrl, ...)
-  if (sum(sample.vars) > 0) {
+  if (length(sample.vars) > 0) {
     m$new.names = new.names
     m$sample.vars = sample.vars
   }
@@ -47,8 +47,8 @@ trainLearner.regr.fixcubist = function(.learner, .task, .subset, .weights = NULL
 
 #' @export
 predictLearner.regr.fixcubist = function(.learner, .model, .newdata, ...) {
-  # Overwrite colnames in newdata if existing
-  if (sum(.model$learner.model$sample.vars) > 0)
-    colnames(.newdata)[.model$learner.model$sample.vars] = .model$learner.model$new.names
+  # Overwrite colnames in newdata if sample variable names were replaced
+  if (length(.model$learner.model$sample.vars) > 0)
+    colnames(.newdata)[colnames(.newdata) %in% .model$learner.model$sample.vars] = .model$learner.model$new.names
   predict(.model$learner.model, newdata = .newdata, ...)
 }
