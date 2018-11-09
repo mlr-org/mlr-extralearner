@@ -36,7 +36,7 @@ makeRLearner.classif.ranger.pow = function() {
 }
 
 #' @export
-trainLearner.classif.ranger.pow = function(.learner, .task, .subset, .weights = NULL, ...) {
+trainLearner.classif.ranger.pow = function(.learner, .task, .subset, .weights = NULL, mtry.power, ...) {
   tn = getTaskTargetNames(.task)
 
   if(!missing(mtry.power)) {
