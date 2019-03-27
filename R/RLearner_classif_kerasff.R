@@ -5,7 +5,7 @@ makeRLearner.classif.kerasff = function() {
     package = "keras",
     par.set = makeParamSet(
       makeIntegerLearnerParam(id = "epochs", lower = 1L, default = 30L),
-      makeIntegerLearnerParam(id = "early_stoping_patience", lower = 2L, default = 2L),
+      makeIntegerLearnerParam(id = "early_stopping_patience", lower = 0L, default = 2L),
       makeDiscreteLearnerParam(id = "optimizer",  default = "sgd",
         values = c("sgd", "rmsprop", "adagrad", "adadelta", "adam", "nadam")),
       makeNumericLearnerParam(id = "lr", lower = 0, upper = 1, default = 0.001),
@@ -47,7 +47,10 @@ makeRLearner.classif.kerasff = function() {
       makeNumericLearnerParam(id = "l1_reg_layer",
         lower = 0, upper = 1, default = 0),
       makeNumericLearnerParam(id = "l2_reg_layer",
-        lower = 0, upper = 1, default = 0)
+        lower = 0, upper = 1, default = 0),
+      makeNumericLearnerParam(id = "validation_split",
+        lower = 0, upper = 1, default = 0),
+      makeLogicalLearnerParam(id = "learning_rate_scheduler", default = FALSE)
     ),
     properties = c("numerics", "prob", "twoclass", "multiclass"),
     par.vals = list(),
@@ -58,12 +61,12 @@ makeRLearner.classif.kerasff = function() {
 
 
 trainLearner.classif.kerasff  = function(.learner, .task, .subset, .weights = NULL,
-  epochs = 30L, early_stopping_patience = 5L,
+  epochs = 30L, early_stopping_patience = 5L, learning_rate_scheduler = FALSE,
   optimizer = "adam", lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, momentum = 0, decay = 0,
   rho = 0.9, loss = "categorical_crossentropy", batch_size = 128L, layers = 1,
   batchnorm_dropout = "dropout", input_dropout_rate = 0, dropout_rate = 0,
   units_layer1 = 32, units_layer2 = 32, units_layer3 = 32, units_layer4 = 32, init_layer = "glorot_uniform",
-  act_layer = "relu", l1_reg_layer = 0.01, l2_reg_layer = 0.01) {
+  act_layer = "relu", l1_reg_layer = 0.01, l2_reg_layer = 0.01, validation_split = 0.2) {
 
   require("keras")
   input_shape = getTaskNFeats(.task)
@@ -86,7 +89,13 @@ trainLearner.classif.kerasff  = function(.learner, .task, .subset, .weights = NU
     "adam" = optimizer_adam(lr, beta_1, beta_2, decay = decay),
     "nadam" = optimizer_nadam(lr, beta_1, beta_2, schedule_decay = decay)
   )
-  early_stopping = callback_early_stopping(monitor = 'val_loss', patience = early_stopping_patience)
+
+  callbacks = c()
+  if (early_stopping_patience > 0)
+    callbacks = c(callbacks, callback_early_stopping(monitor = 'val_loss', patience = early_stopping_patience))
+  if (learning_rate_scheduler)
+    callbacks = c(callback_learning_rate_scheduler(function(epoch, lr) {lr * 1/(1 * epoch)}))
+
   units_layers = c(units_layer1, units_layer2, units_layer3, units_layer4)
 
   model = keras_model_sequential()
@@ -112,8 +121,8 @@ trainLearner.classif.kerasff  = function(.learner, .task, .subset, .weights = NU
   y = to_categorical(as.numeric(data$target) - 1, output_shape)
   history = model %>% fit(as.matrix(data$data), y,
     epochs = epochs, batch_size = batch_size,
-    validation_split = 0.2,
-    callbacks = early_stopping)
+    validation_split = validation_split,
+    callbacks = callbacks)
 
   return(list(model = model, history = history, target_levels = levels(data$target)))
 }

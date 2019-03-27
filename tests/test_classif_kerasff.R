@@ -14,4 +14,10 @@ test_that("classif_kerasff", {
   lrn = makeLearner("classif.kerasff", optimizer = "sgd", momentum = 0.7, decay = 0.01, lr = 0.01)
   r = resample(lrn, iris.task, hout)
   expect_class(r, "ResampleResult")
+
+  lrn = makeLearner("classif.kerasff", early_stopping_patience = 0)
+  r = resample(lrn, iris.task, hout)
+
+  lrn = makeLearner("classif.kerasff", learning_rate_scheduler = TRUE)
+  r = resample(lrn, iris.task, hout)
 })
